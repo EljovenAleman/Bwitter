@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,11 +9,24 @@ public class UserRepository
 
     public void Register(string name, string nickname)
     {
-        users.Add(nickname, name);
+        try
+        {
+            users.Add(nickname, name);
+        }
+        catch
+        {
+            throw new UserAlreadyRegisteredException();
+        }
+        
     }
 
     public bool IsRegistered(string nickname)
     {
         return users.ContainsKey(nickname);                
     }
+}
+
+public class UserAlreadyRegisteredException : Exception
+{
+    
 }

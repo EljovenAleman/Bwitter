@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
-
+using System;
 
 public class Test
 {
@@ -46,9 +46,24 @@ public class Test
 
         //WhenThen
         Assert.IsFalse(userRepository.IsRegistered(nonRegisteredUser));
+    }
 
+    [Test]
+    public void Throw_An_Error_When_Register_Is_Called_With_A_Nickname_That_Is_Already_Registered()
+    {
+        //Given
+        string UserName = "Diego";
+        string UserNickname = "EljovenAleman";
+
+        string UserName2 = "Santi";
+        UserRepository userRepository = new UserRepository();
+
+        userRepository.Register(UserName, UserNickname);
+
+        //When
+        Assert.Throws<UserAlreadyRegisteredException>(() => userRepository.Register(UserName2, UserNickname));
 
 
     }
-
+         
 }
