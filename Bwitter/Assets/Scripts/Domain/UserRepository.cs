@@ -34,3 +34,24 @@ public class UserRepository
         return users[nickname];
     }
 }
+
+public class FollowerRepository
+{
+    Dictionary<string, List<string>> followers = new Dictionary<string, List<string>>();
+
+    public void Follow(string follower, string followee)
+    {        
+        if(!followers.ContainsKey(follower))
+        {
+            followers.Add(follower, new List<string>());
+        }
+        followers[follower].Add(followee);                        
+    }
+
+    public bool IsFollowing(string follower, string followee)
+    {
+        return followers[follower].Contains(followee);
+    }
+
+
+}
