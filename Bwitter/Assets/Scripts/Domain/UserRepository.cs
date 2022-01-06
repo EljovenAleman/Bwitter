@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,9 +23,14 @@ public class UserRepository
     {
         return users.ContainsKey(nickname);                
     }
-}
 
-public class UserAlreadyRegisteredException : Exception
-{
-    
+    public void UpdateUserName(string newName, string nickname)
+    {
+        users[nickname] = newName;
+    }
+
+    public string GetNameFromNickName(string nickname)
+    {
+        return users[nickname];
+    }
 }

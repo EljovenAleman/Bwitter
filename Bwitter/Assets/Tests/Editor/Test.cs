@@ -62,8 +62,26 @@ public class Test
 
         //When
         Assert.Throws<UserAlreadyRegisteredException>(() => userRepository.Register(UserName2, UserNickname));
+    }
 
+    [Test]
+    public void Let_The_User_Update_Their_Real_Name()
+    {
+        //given
+        string UserName = "Diego";
+        string UserNickname = "EljovenAleman";
 
+        string newName = "Marado";
+
+        UserRepository userRepository = new UserRepository();
+
+        userRepository.Register(UserName, UserNickname);
+
+        //When
+        userRepository.UpdateUserName(newName, UserNickname);
+
+        //Then
+        Assert.AreEqual(newName, userRepository.GetNameFromNickName(UserNickname));
     }
          
 }
