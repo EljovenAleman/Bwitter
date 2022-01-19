@@ -1,5 +1,17 @@
 {
+"scopedRegistries": [
+        {
+            "name": "package.openupm.com",
+            "url": "https://package.openupm.com/",
+            "scopes": [
+                "net.tnrd.nsubstitute",
+"com.newtonsoft.json"
+            ]
+        }
+    ],
   "dependencies": {
+"com.newtonsoft.json": "1.0.1",
+"net.tnrd.nsubstitute": "4.2.2",
     "com.unity.2d.animation": "3.2.5",
     "com.unity.2d.pixel-perfect": "2.0.4",
     "com.unity.2d.psdimporter": "2.1.6",
