@@ -4,26 +4,30 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 public class JsonUserRepository : IUserRepository
-{
-    
-
+{    
     IUserPersistenceService persistenceService;
 
     public JsonUserRepository(IUserPersistenceService persistenceService)
     {
         this.persistenceService = persistenceService;
     }
+
     public void Register(string name, string nickname)
     {
-        Dictionary<string, string> users = new Dictionary<string, string>();
-        users.Add(nickname, name);
-        var serializedString = JsonConvert.SerializeObject(users);
+        var deserializedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
+
+        deserializedDictionary.Add(nickname, name);
+        var serializedString = JsonConvert.SerializeObject(deserializedDictionary);
+
         persistenceService.Save(serializedString);
     }
 
     public string GetNameFromNickName(string nickname)
     {
-        throw new System.NotImplementedException();
+        var deserializedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
+
+        return deserializedDictionary[nickname];
+
     }
 
     public bool IsRegistered(string nickname)
@@ -41,6 +45,8 @@ public class JsonUserRepository : IUserRepository
 public interface IUserPersistenceService
 {
     void Save(string serializedUsers);
+
+    string Load();
 }
 
 

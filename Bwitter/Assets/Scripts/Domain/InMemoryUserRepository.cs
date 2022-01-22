@@ -19,9 +19,12 @@ public class InMemoryUserRepository : IUserRepository
 
     }
 
+    
+
     public bool IsRegistered(string nickname)
     {
         return users.ContainsKey(nickname);
+        
     }
 
     public void UpdateUserName(string newName, string nickname)
