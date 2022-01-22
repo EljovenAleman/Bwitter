@@ -14,31 +14,41 @@ public class JsonUserRepository : IUserRepository
 
     public void Register(string name, string nickname)
     {
-        var deserializedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
+        var users = GetUsers();
 
-        deserializedDictionary.Add(nickname, name);
-        var serializedString = JsonConvert.SerializeObject(deserializedDictionary);
+        users.Add(nickname, name);
 
-        persistenceService.Save(serializedString);
+        SaveUsers(users);
     }
 
     public string GetNameFromNickName(string nickname)
-    {
-        var deserializedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
-
-        return deserializedDictionary[nickname];
-
+    {        
+        return GetUsers()[nickname];
     }
 
     public bool IsRegistered(string nickname)
     {
-        return true;
+        return GetUsers().ContainsKey(nickname);
     }
-
 
     public void UpdateUserName(string newName, string nickname)
     {
-        throw new System.NotImplementedException();
+        var users = GetUsers();
+        users[nickname] = newName;
+
+        SaveUsers(users);
+    }
+
+    private Dictionary<string, string> GetUsers()
+    {
+        return JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
+    }
+
+    private void SaveUsers(Dictionary<string, string> users)
+    {
+        var serializedString = JsonConvert.SerializeObject(users);
+
+        persistenceService.Save(serializedString);
     }
 }
 

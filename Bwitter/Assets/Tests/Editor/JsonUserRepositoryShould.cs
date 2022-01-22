@@ -88,6 +88,50 @@ public class JsonUserRepositoryShould
         Assert.AreEqual(name2, returnedName2);
     }
 
+    [Test]
+    public void Return_True_When_Searching_For_A_Registered_User()
+    {
+        //Given
+        string name, nickname, name2, nickname2;
+        name = "Diego";
+        nickname = "Bettendorf";
+
+        name2 = "Santi";
+        nickname2 = "Perez";
+
+        Dictionary<string, string> users = new Dictionary<string, string>();
+        users.Add(nickname, name);
+
+        jsonUserRepo.Register(name, nickname);
+
+        //WhenThen
+        
+        Assert.IsTrue(jsonUserRepo.IsRegistered(nickname));
+        Assert.IsFalse(jsonUserRepo.IsRegistered(nickname2));
+
+    }
+
+    [Test]
+    public void Update_The_User_Name_Using_The_Nickname()
+    {
+        //Given
+        string name, nickname;
+        name = "Diego";
+        nickname = "Bettendorf";
+       
+        string expectedName = "Dieguitou";
+
+        jsonUserRepo.Register(name,nickname);
+        
+        //When
+
+        jsonUserRepo.UpdateUserName(expectedName, nickname);
+
+        //Then
+        Assert.AreEqual(expectedName, jsonUserRepo.GetNameFromNickName(nickname));
+
+    }
+
 
 }
 
