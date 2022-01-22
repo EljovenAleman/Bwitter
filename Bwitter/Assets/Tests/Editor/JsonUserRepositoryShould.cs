@@ -132,6 +132,16 @@ public class JsonUserRepositoryShould
 
     }
 
+    [Test]
+    public void Throw_An_Exception_When_Asked_To_Update_A_Name_For_A_Username_That_Doesnt_Exist()
+    {
+        //Given
+        string nickname = "Aleman";
+
+        //WhenThen
+        Assert.Throws<UserDoesntExistException>(() => jsonUserRepo.UpdateUserName("Marado", nickname));
+    }
+
 
 }
 

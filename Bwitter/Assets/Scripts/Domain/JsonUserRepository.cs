@@ -34,9 +34,14 @@ public class JsonUserRepository : IUserRepository
     public void UpdateUserName(string newName, string nickname)
     {
         var users = GetUsers();
+        if (!users.ContainsKey(nickname))
+        {
+            throw new UserDoesntExistException();
+        }
+        
         users[nickname] = newName;
 
-        SaveUsers(users);
+        SaveUsers(users);        
     }
 
     private Dictionary<string, string> GetUsers()

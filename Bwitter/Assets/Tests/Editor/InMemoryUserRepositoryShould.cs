@@ -4,15 +4,22 @@ using UnityEngine;
 using NUnit.Framework;
 using System;
 
-public class UserRepositoryShould
+public class InMemoryUserRepositoryShould
 {
+    InMemoryUserRepository userRepository;
+
+    [SetUp]
+    public void SetUp()
+    {
+        userRepository = new InMemoryUserRepository();
+    }
+
     [Test]
     public void Register_A_User_With_A_Name_And_A_Nickname()
     {
         //Given
         string name = "Diego";
-        string nickname = "EljovenAleman";
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        string nickname = "EljovenAleman";        
 
         //When
 
@@ -26,11 +33,8 @@ public class UserRepositoryShould
 
     [Test]
     public void Return_False_When_IsRegistered_Is_Called_And_No_User_Is_Registered()
-    {
-        //Given
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
-
-        //WhenThen
+    {                
+        //GivenWhenThen
         Assert.IsFalse(userRepository.IsRegistered("diego"));
     }
 
@@ -40,8 +44,7 @@ public class UserRepositoryShould
         //Given
         string registeredUserName = "Diego";
         string registeredUserNickname = "EljovenAleman";
-        string nonRegisteredUser = "Samte";
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        string nonRegisteredUser = "Samte";        
         userRepository.Register(registeredUserName, registeredUserNickname);
 
         //WhenThen
@@ -55,8 +58,7 @@ public class UserRepositoryShould
         string UserName = "Diego";
         string UserNickname = "EljovenAleman";
 
-        string UserName2 = "Santi";
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        string UserName2 = "Santi";        
 
         userRepository.Register(UserName, UserNickname);
 
@@ -71,9 +73,7 @@ public class UserRepositoryShould
         string UserName = "Diego";
         string UserNickname = "EljovenAleman";
 
-        string newName = "Marado";
-
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        string newName = "Marado";        
 
         userRepository.Register(UserName, UserNickname);
 
@@ -84,5 +84,15 @@ public class UserRepositoryShould
         Assert.AreEqual(newName, userRepository.GetNameFromNickName(UserNickname));
     }
 
-                     
+    [Test]
+    public void Throw_An_Exception_When_Asked_To_Update_A_Name_For_A_Username_That_Doesnt_Exist()
+    {
+        //Given
+        string nickname = "Aleman";        
+
+        //WhenThen
+        Assert.Throws<UserDoesntExistException>(() => userRepository.UpdateUserName("Marado", nickname));
+    }
+
+
 }

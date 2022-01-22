@@ -29,6 +29,10 @@ public class InMemoryUserRepository : IUserRepository
 
     public void UpdateUserName(string newName, string nickname)
     {
+        if (!users.ContainsKey(nickname))
+        {
+            throw new UserDoesntExistException();
+        }
         users[nickname] = newName;
     }
 
