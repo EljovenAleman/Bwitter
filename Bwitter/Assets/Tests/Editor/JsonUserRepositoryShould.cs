@@ -13,7 +13,7 @@ public class JsonUserRepositoryShould
     [SetUp]
     public void SetUp()
     {
-        persistenceService = Substitute.For<IUserPersistenceService>();
+        persistenceService = new FakeUserPersistenceService();
         jsonUserRepo = new JsonUserRepository(persistenceService);
     }
 
@@ -28,21 +28,18 @@ public class JsonUserRepositoryShould
         users.Add(nickname, name);
 
         string expectedSerialization = JsonConvert.SerializeObject(users);
-
-        persistenceService.Load().Returns(JsonConvert.SerializeObject(new Dictionary<string,string>()));
-
+        
         //When
         jsonUserRepo.Register(name, nickname);
 
-        //Then
-        persistenceService.Received(1).Save(expectedSerialization);
+        //Then        
+        Assert.AreEqual(expectedSerialization, persistenceService.Load());
     }
 
     [Test]
     public void Register_Two_Users_Using_Jason_And_Save_Them()
     {
         //Given
-
         string name, nickname, name2, nickname2;
         name = "Diego";
         nickname = "Bettendorf";
@@ -54,25 +51,14 @@ public class JsonUserRepositoryShould
         users.Add(nickname, name);
         users.Add(nickname2, name2);
 
-
-        string expectedSerialization = JsonConvert.SerializeObject(users);
-
-        persistenceService.Load().Returns(JsonConvert.SerializeObject(new Dictionary<string, string>()));
+        string expectedSerialization = JsonConvert.SerializeObject(users);        
 
         //When
-
-        jsonUserRepo.Register(name,nickname);
-
-        var dictionaryWithFirstName = new Dictionary<string, string>();
-        dictionaryWithFirstName.Add(nickname, name);
-
-        persistenceService.Load().Returns(JsonConvert.SerializeObject(dictionaryWithFirstName));
-
-
+        jsonUserRepo.Register(name,nickname);              
         jsonUserRepo.Register(name2, nickname2);
 
         //Then
-        persistenceService.Received(1).Save(expectedSerialization);
+        Assert.AreEqual(expectedSerialization, persistenceService.Load());
     }
 
     [Test]
@@ -90,13 +76,10 @@ public class JsonUserRepositoryShould
         users.Add(nickname, name);
         users.Add(nickname2, name2);
 
-
         string serialization = JsonConvert.SerializeObject(users);
-
-        persistenceService.Load().Returns(serialization);
+        persistenceService.Save(serialization);
 
         //When
-
         var returnedName = jsonUserRepo.GetNameFromNickName(nickname);
         var returnedName2 = jsonUserRepo.GetNameFromNickName(nickname2);
 
@@ -106,4 +89,19 @@ public class JsonUserRepositoryShould
     }
 
 
+}
+
+public class FakeUserPersistenceService : IUserPersistenceService
+{
+    string serializedUsers = "{}";
+
+    public string Load()
+    {
+        return serializedUsers;
+    }
+
+    public void Save(string serializedUsers)
+    {
+        this.serializedUsers = serializedUsers;
+    }
 }
