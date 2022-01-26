@@ -147,7 +147,7 @@ public class JsonUserRepositoryShould
 
 public class FakeUserPersistenceService : IUserPersistenceService
 {
-    string serializedUsers = "{}";
+    string serializedUsers;
 
     public string Load()
     {

@@ -46,6 +46,11 @@ public class JsonUserRepository : IUserRepository
 
     private Dictionary<string, string> GetUsers()
     {
+        if (string.IsNullOrEmpty(persistenceService.Load()))
+        {
+            return new Dictionary<string, string>();
+        }
+
         return JsonConvert.DeserializeObject<Dictionary<string, string>>(persistenceService.Load());
     }
 
