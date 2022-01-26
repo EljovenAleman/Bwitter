@@ -57,11 +57,4 @@ public class JsonUserRepository : IUserRepository
     }
 }
 
-public interface IUserPersistenceService
-{
-    void Save(string serializedUsers);
-
-    string Load();
-}
-
 
