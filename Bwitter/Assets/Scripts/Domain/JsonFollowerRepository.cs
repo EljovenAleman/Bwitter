@@ -3,15 +3,22 @@ using System.Collections.Generic;
 
 public class JsonFollowerRepository : IFollowerRepository
 {
-    IFollowerPersistenceService persistenceService;
+    IFollowerPersistenceService persistenceService;    
+    IUserRepository userRepository;
 
-    public JsonFollowerRepository(IFollowerPersistenceService persistenceService)
+    public JsonFollowerRepository(IFollowerPersistenceService persistenceService, IUserRepository userRepository)
     {
         this.persistenceService = persistenceService;
+        this.userRepository = userRepository;
     }
 
     public void Follow(string followerNickname, string followeeNickname)
     {
+        if(!userRepository.IsRegistered(followerNickname) || !userRepository.IsRegistered(followeeNickname))
+        {
+            throw new UserDoesntExistException();
+        }
+        
         var followees = GetFollowees();
 
         if(!followees.ContainsKey(followerNickname))
@@ -31,7 +38,24 @@ public class JsonFollowerRepository : IFollowerRepository
 
     public bool IsFollowing(string follower, string followee)
     {
-        throw new System.NotImplementedException();
+        if (!userRepository.IsRegistered(follower) || !userRepository.IsRegistered(followee))
+        {
+            throw new UserDoesntExistException();
+        }
+
+        var followees = GetFollowees();
+
+        try
+        {
+            var followeesList = followees[follower];
+
+            return followeesList.Contains(followee);
+        }
+        catch(KeyNotFoundException exception)
+        {
+            return false;
+        }
+        
     }
     
     public Dictionary<string, List<string>> GetFollowees()
@@ -50,6 +74,8 @@ public class JsonFollowerRepository : IFollowerRepository
 
 
 }
+
+
 
 
 
